@@ -1,6 +1,6 @@
 # < 이미지 읽기 >
 import cv2
-img_file ='C:/Users/hyukstory/Desktop/hyukstory_AI/ink.png'         # ① 표시할 이미지 경로
+img_file ='C:/Users/hyukstory/Desktop/github/hyukstory_AI/ink.png'         # ① 표시할 이미지 경로
 img = cv2.imread(img_file)  # ② 이미지를 읽어서 img 변수에 할당
 
 if img is not None:
@@ -13,8 +13,8 @@ else:
 
 # < 그레이 스케일로 읽고 저장 >
 import cv2
-img_file = 'C:/Users/hyukstory/Desktop/hyukstory_AI/ink.png'
-save_file = 'C:/Users/hyukstory/Desktop/hyukstory_AI/ink_gray.png'
+img_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/ink.png'
+save_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/ink_gray.png'
 
 img = cv2.imread(img_file, cv2.IMREAD_GRAYSCALE)  # 그레이 스케일로 읽기
 cv2.imshow(img_file, img)
@@ -28,7 +28,7 @@ cv2.destroyAllWindows()
 # < 동영상 및 카메라 프레임 읽기 >
 import cv2
 
-video_file = 'C:/Users/hyukstory/Desktop/hyukstory_AI/cat.mp4'                 # 동영상 파일 경로
+video_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/cat.mp4'                 # 동영상 파일 경로
 cap = cv2.VideoCapture(video_file)     # 동영상 캡처 객체 생성
 if cap.isOpened():                     # 캡처 객체 초기화 확인
     while True:
@@ -68,13 +68,13 @@ cv2.destroyAllWindows()
 ## < 카메라 비디오 속성 제어 1. FPS>
 
 import cv2
-video_file = 'C:/Users/hyukstory/Desktop/hyukstory_AI/cat.mp4'   # 동영상 파일 경로
+video_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/cat.mp4'   # 동영상 파일 경로
 
 cap = cv2.VideoCapture(video_file)                  # 동영상 캡쳐 객체 생성
 if cap.isOpened():                                      # 캡처 객체 초기화 확인
     fps = cap.get(cv2.CAP_PROP_FPS)                     # 동영상의 초당 프레임 수 (fps) 속성 받아오기
     delay = int( 1000 / fps)
-    print("FPS :%, Delay : %dms" % (fps, delay))
+    print("FPS : %f, Delay : %dms" % (fps, delay))
 
     while True :
         ret, img =  cap.read()                             # 다음 프레임 일기
