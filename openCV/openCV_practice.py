@@ -300,3 +300,83 @@ cv2.ellipse(img, (200, 425), (100, 50), 45, 0, 360, (0, 0, 0))
 cv2.imshow('circle', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+
+# < 글씨 그리기 >
+'''
+cv2.putText(img, text, point, fontFace, fontSize, color, [thickness, lineType])
+- img : 글씨를 표시할 이미지
+- text : 표시할 문자열
+- point : 글씨를 표시할 좌표 (좌측 하단 기준 )(x,y)
+- fontFace : 글꼴
+    - cv2.FONT_HERSHEY_PLAIN : 산세리프체 작은 글꼴
+    - cv2.FONT_HERSHEY_SIMPLEX : 산세리프체 일반 글꼴
+    - cv2.FONT_HERSHEY_DUPLEX : 산세리프체 진한 글꼴
+    - cv2.FONT_HERSHEY_COMPLEX_SMALL : 세리프체 작은 글꼴
+    - cv2.FONT_HERSHEY_COMPLEX : 산세리프체 일반 글꼴
+    - cv2.FONT_HERSHEY_TRIPLEX : 산세리프체 진한 글꼴
+    - cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 필기체 산세리프 글꼴
+    - cv2.FONT_HERSHEY_SCRIPT_COMPLEX : 필기체 세리프 글꼴
+    - cv2.FONT_ITALIC : 이탤릭체 글꼴
+- fontSize : 글꼴 크기
+- color, thickness, lineType : cv2.retangle() 과 동일
+'''
+
+
+import cv2
+img = cv2.imread('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg')
+
+cv2.putText(img,"PLAIN", (50, 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+cv2.putText(img,"SIMPLEX", (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
+cv2.putText(img,"DUPLEX", (50, 110), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0))
+
+cv2.putText(img,"SIMPLEX * 2", (200, 110), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 250))
+cv2.putText(img,"COMPLEX_SMALL", (200, 110), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0))
+
+# 이 코드는 폰트를 함께 사용하는 방법입니다
+cv2.putText(img,"PLAIN | ITALIC", (50, 430), cv2.FONT_HERSHEY_PLAIN | cv2.FONT_ITALIC, 1, (0, 0, 0))
+cv2.putText(img,"COMPLEX | ITALIC", (50, 470), cv2.FONT_HERSHEY_COMPLEX | cv2.FONT_ITALIC, 1, (0, 0, 0))
+cv2.imshow('draw text', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+# < 창 관리 >
+'''
+- cv2.namedWindow(title, [option]) : 이름을 갖는 창 열기
+    - title : 창 이름 , 제목 줄에 표시
+    - option : 창 옵션 , 'cv2.WINDOW_' 로 시작
+        - cv2.WINDOW_NORMAL : 임의의 크기 , 사용자 창 크기 조정 가능
+        - cv2.WINDOW_AUTOSIZE : 이미지와 같은 크기 , 창 크기 재조정 불가능
+- cv2.moveWindow(title, x , y) : 창 위치 이동
+    - title : 위치를 변경할 창의 이름
+    - x, y : 이동할 창의 위치
+- cv2.resizeWindow(title, width, height) : 창 크기 변경
+    - title : 크기를 변경할 창의 이름
+    - width, height : 크기를 변경할 창의 폭과 높이
+- cv2.destoryWindow(title) : 창 닫기
+    - title : 닫을 대상 창 이름
+- cv2.destoryAllWindows() : 열린 모든 창 닫기
+'''
+
+
+import cv2
+file_path = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/photo.jpg'
+img = cv2.imread(file_path)                            # 이미지를 기본값으로 읽기
+img_gray = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) # 이미지를 그레이 스케일로 읽기
+cv2.namedWindow('origin', cv2.WINDOW_AUTOSIZE)         #origin 이라는 이름으로 창 생성
+cv2.namedWindow('gray', cv2.WINDOW_NORMAL)             #gray 라는 이름으로 창 생성
+
+cv2.imshow('origin', img)                              #origin 창에 이미지 표시
+cv2.imshow('gray', img_gray)                           #gray 창에 이미지 표시
+cv2.moveWindow('orgin', 0, 0,)                         # 창 위치 변경
+cv2.moveWindow('gray', 100, 100)                       # 창 위치 변경
+cv2.waitKey(0)
+cv2.resizeWindow('orgin', 200, 200)                    # 창 크기 변경 아직 변경 안됨
+cv2.resizeWindow('gray', 100, 100)
+# 창 크기 변경 변경됨
+cv2.waitKey(0)
+cv2.destroyWindow('gray')                              # 아무 키나 누르면 gray 창 닫기
+cv2.waitKey(0)
+cv2.destroyAllWindows()                                # 아무 키나 누르면 창 전체 닫기
