@@ -203,3 +203,194 @@ for i ,  (key, value) in enumerate (imgs.items()) :
     plt.xticks([]); plt.yticks([])
 
 plt.show()
+## 오츠의 알고리즘은 모든 경우의 수에 대해 경계 값을 조사해야 하므로 속도가 느리다는 단점.
+## 또한 노이즈가 많은 영상에는 오츠의 알고리즘을 적용해도 좋은 결과를 얻지 못하는 경우가 많다.
+
+
+
+
+# < 적응형 스레시홀드 >
+## 이미지를 여러 영역으로 나눈 다음 그 주변 픽셀 값만 가지고 계산을 해서 경계값을 구하는 방법
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+blk_size = 9        # 블럭 사이즈
+C = 5               # 차감 상수
+img = cv2.imread('openCV/receipt.png', cv2.IMREAD_GRAYSCALE) # 그레이 스케일로  읽기
+
+# ---① 오츠의 알고리즘으로 단일 경계 값을 전체 이미지에 적용
+ret, th1 = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+
+# ---② 어뎁티드 쓰레시홀드를 평균과 가우시안 분포로 각각 적용
+th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C,\
+                                      cv2.THRESH_BINARY, blk_size, C)
+th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, \
+                                     cv2.THRESH_BINARY, blk_size, C)
+
+# ---③ 결과를 Matplot으로 출력
+imgs = {'Original': img, 'Global-Otsu:%d'%ret:th1, \
+        'Adapted-Mean':th2, 'Adapted-Gaussian': th3}
+for i, (k, v) in enumerate(imgs.items()):
+    plt.subplot(2,2,i+1)
+    plt.title(k)
+    plt.imshow(v,'gray')
+    plt.xticks([]),plt.yticks([])
+
+
+plt.show()
+
+
+# < 이미지 합치기 >
+## 1. 더하기 함수 활용, openCV 함수 활용
+import cv2
+import numpy as np
+import matplotlib.pylab as plt
+
+    # ① 연산에 사용할 이미지 읽기
+img1 = cv2.imread('openCV/selfie.png')
+img2 = cv2.imread('openCV/gdragon.png')
+
+    # ② 이미지 덧셈
+img3 = img1 + img2         ## 더하기 연산 활용
+img4 = cv2.add(img1, img2) ## OpenCV 함수
+
+imgs = {'img1':img1, 'img2':img2, 'img1+img2': img3, 'cv.add(img1, img2)': img4}
+
+    # ③ 이미지 출력
+for i, (k, v) in enumerate(imgs.items()):
+    plt.subplot(2,2, i + 1)
+    plt.imshow(v[:,:,::-1])
+    plt.title(k)
+    plt.xticks([]); plt.yticks([])
+
+plt.show()
+
+## 2. 트랙바로 알파 블렌딩 조절하기
+import cv2
+import numpy as np
+
+win_name = 'Alpha blending'     # 창 이름
+trackbar_name = 'fade'          # 트렉바 이름
+
+# ---① 트렉바 이벤트 핸들러 함수
+def onChange(x):
+    alpha = x/100
+    dst = cv2.addWeighted(img1, 1-alpha, img2, alpha, 0)
+    cv2.imshow(win_name, dst)
+
+
+# ---② 합성 영상 읽기
+img1 = cv2.imread('openCV/selfie.png')
+img2 = cv2.imread('openCV/gdragon.png')
+
+# ---③ 이미지 표시 및 트렉바 붙이기
+cv2.imshow(win_name, img1)
+cv2.createTrackbar(trackbar_name, win_name, 0, 100, onChange)
+
+cv2.waitKey()
+cv2.destroyAllWindows()
+
+
+
+
+# < 차영상 >
+## 두 영상의 차이 파악
+## 산업현장에서 도면의 차이를 찾거나 전자제품의 PCB 회로의 오류를 찾는 데도 사용할 수 있고 , 카메라로 촬영한 영상에
+## 실시간으로 움직임이 있는지를 알아내는 데도 유용
+import numpy as np, cv2
+
+#--① 연산에 필요한 영상을 읽고 그레이스케일로 변환
+img1 = cv2.imread('openCV/robot_arm1.jpg')
+img2 = cv2.imread('openCV/robot_arm2.jpg')
+img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)  # 그레이 스케일로 변환
+img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)  # 그레이 스케일로 변환
+
+#--② 두 영상의 절대값 차 연산
+diff = cv2.absdiff(img1_gray, img2_gray)
+
+#--③ 차 영상을 극대화 하기 위해 쓰레시홀드 처리 및 컬러로 변환
+_, diff = cv2.threshold(diff, 1, 255, cv2.THRESH_BINARY)  # 차이를 극대화 하기위해 1 보다 큰 값은 모두 255 로 바꿈
+diff_red = cv2.cvtColor(diff, cv2.COLOR_GRAY2BGR)         # 색상을 표현하기 위해 컬러 스케일로 전환
+diff_red[:,:,2] = 0
+
+#--④ 두 번째 이미지에 변화 부분 표시
+spot = cv2.bitwise_xor(img2, diff_red)  # 원본 이미지는 배경이 흰색이므로 255 를 가지고 있고
+                                        # 차영상은 차이가 있는 빨간색 영역을 제외하고는 255 이므로
+                                        # XOR 연산을하면 서로 다른 영역인 도면의 그림과 빨간색으로 표시된 차영상 부분이 합성됨.
+                                        # (XOR 은 서로 다를 때만 참)
+
+#--⑤ 결과 영상 출력
+cv2.imshow('img1', img1)
+cv2.imshow('img2', img2)
+cv2.imshow('diff', diff)
+cv2.imshow('spot', spot)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
+
+
+
+# < 이미지 합성과 마스킹 >
+## 색상에 따라 영역을 떼어내기
+'''
+dst = cv2.inRange(img, from, to) : 범위에 속하지 않은 픽셀 판단
+- img : 입력 영상
+- from : 범위의 시작 배열
+- to : 범위의 끝 배열
+- dst : img 가 from ~ to 에 포함되면 255, 아니면 0 을 픽셀 값으로 하는 배열
+
+HSV : 
+- H값 : 색상(빨강: 165 ~180, 0 ~ 15 / 초록: 45 ~ 75 / 파랑: 90 ~120)
+- S값 : 채도(색상이 얼마나 순수하게 포함되어 있는지) 0 ~ 255 범위로 표현, 255 는 가장 순수한 색상을 의미
+- V값 : 명도(빛이 얼마나 밝은지 어두운지) 0 ~ 255 범위로 표현 , 255 인 경우 가장 밝은 상태
+'''
+
+import cv2
+import numpy as np
+import matplotlib.pylab as plt
+
+#--① 신호 영상 읽어서 HSV로 변환
+img = cv2.imread("openCV/lamp.jpg")
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) # BGR을 HSV로 전환
+
+#--② 색상별 영역 지정
+blue1 = np.array([90, 50, 50])          # 파랑: 90 ~120
+blue2 = np.array([120, 255,255])
+green1 = np.array([45, 50,50])          # 초록: 45 ~ 75
+green2 = np.array([75, 255,255])
+red1 = np.array([0, 50,50])             # 빨강: 165 ~180, 0 ~ 15
+red2 = np.array([15, 255,255])
+red3 = np.array([165, 50,50])
+red4 = np.array([180, 255,255])
+yellow1 = np.array([20, 50,50])
+yellow2 = np.array([35, 255,255])
+
+# --③ 색상에 따른 마스크 생성
+## cv.inRange(img, from, to) 함수는 img에서 from~to 배열 구간에 포함되면 해당 픽셀의 값으로 255를 할당 하고 그렇지 않으면 0을 할당
+## 그 결과 이 함수의 반환 결과는 바이너리 스케일이 된다
+mask_blue = cv2.inRange(hsv, blue1, blue2)
+mask_green = cv2.inRange(hsv, green1, green2)
+mask_red = cv2.inRange(hsv, red1, red2)
+mask_red2 = cv2.inRange(hsv, red3, red4)
+mask_yellow = cv2.inRange(hsv, yellow1, yellow2)
+
+#--④ 색상별 마스크로 색상만 추출
+## 위에서 생성된 바이너리 스케일을 mask로 받음
+res_blue = cv2.bitwise_and(img, img, mask=mask_blue)
+res_green = cv2.bitwise_and(img, img, mask=mask_green)
+res_red1 = cv2.bitwise_and(img, img, mask=mask_red)
+res_red2 = cv2.bitwise_and(img, img, mask=mask_red2)
+res_red = cv2.bitwise_or(res_red1, res_red2)
+res_yellow = cv2.bitwise_and(img, img, mask=mask_yellow)
+
+#--⑤ 결과 출력
+imgs = {'original': img, 'blue':res_blue, 'green':res_green,
+                            'red':res_red, 'yellow':res_yellow}
+for i, (k, v) in enumerate(imgs.items()):
+    plt.subplot(2,3, i+1)
+    plt.title(k)
+    plt.imshow(v[:,:,::-1])
+    plt.xticks([]); plt.yticks([])
+plt.show()
+
