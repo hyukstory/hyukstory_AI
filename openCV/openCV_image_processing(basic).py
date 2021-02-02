@@ -350,7 +350,7 @@ import cv2
 import numpy as np
 import matplotlib.pylab as plt
 
-#--① 신호 영상 읽어서 HSV로 변환
+#--① 신호 이미지 읽어서 HSV로 변환
 img = cv2.imread("openCV/lamp.jpg")
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) # BGR을 HSV로 전환
 
