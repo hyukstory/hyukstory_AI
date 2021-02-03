@@ -1,6 +1,6 @@
 # < 이미지 읽기 >
 import cv2
-img_file ='C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/ink.png'         # ① 표시할 이미지 경로
+img_file = '/openCV/image_set/ink.png'  # ① 표시할 이미지 경로
 img = cv2.imread(img_file)  # ② 이미지를 읽어서 img 변수에 할당
 
 if img is not None:
@@ -13,8 +13,8 @@ else:
 
 # < 그레이 스케일로 읽고 저장 >
 import cv2
-img_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/ink.png'
-save_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/ink_gray.png'
+img_file = '/openCV/image_set/ink.png'
+save_file = '/openCV/image_set/ink_gray.png'
 
 img = cv2.imread(img_file, cv2.IMREAD_GRAYSCALE)  # 그레이 스케일로 읽기
 cv2.imshow(img_file, img)
@@ -28,7 +28,7 @@ cv2.destroyAllWindows()
 # < 동영상 및 카메라 프레임 읽기 >
 import cv2
 
-video_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/cat.mp4'                 # 동영상 파일 경로
+video_file = '/openCV/image_set/cat.mp4'  # 동영상 파일 경로
 cap = cv2.VideoCapture(video_file)     # 동영상 캡처 객체 생성
 if cap.isOpened():                     # 캡처 객체 초기화 확인
     while True:
@@ -82,7 +82,7 @@ cv2.destroyAllWindows()
 ## < 카메라 비디오 속성 제어 1. FPS>
 
 import cv2
-video_file = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/cat.mp4'   # 동영상 파일 경로
+video_file = '/openCV/image_set/cat.mp4'  # 동영상 파일 경로
 
 cap = cv2.VideoCapture(video_file)                      # 동영상 캡쳐 객체 생성
 if cap.isOpened():                                      # 캡처 객체 초기화 확인
@@ -165,7 +165,7 @@ cv2.destroyAllWindows()
 import cv2
 cap = cv2.VideoCapture(0)
 if cap.isOpened():
-    file_path = "C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/video_record.mp4"        # 저장할 파일 경로 이름 ①
+    file_path = "/openCV/image_set/video_record.mp4"  # 저장할 파일 경로 이름 ①
     fps = 25.40                                                                 # 초당 프레임 수
     fourcc = cv2.VideoWriter_fourcc(*"XVID")               # 인코딩 포맷 문자
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -208,10 +208,10 @@ cv2.line(img, start, end, color, [thickness, lineType]) : 직선 그리기
 import cv2
 import numpy as np
 img = np.full((500, 500, 3), 255, dtype = np.uint8)
-cv2.imwrite('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg', img)
+cv2.imwrite('/openCV/image_set/paper.jpg', img)
 
 
-img = cv2.imread('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg')
+img = cv2.imread('/openCV/image_set/paper.jpg')
 cv2.line(img, (50, 50), (150, 50), (255, 0, 0))    # 파란색 1 픽셀 선
 cv2.line(img, (200, 50), (300, 50), (0, 255, 0))   # 초록색 1 픽셀 선
 cv2.line(img, (350, 50), (450, 50), (0, 0, 5))     # 빨간색 1 픽셀 선
@@ -244,7 +244,7 @@ cv2.rectangle(img, start, end, color, [thickness, lineType]) : 사각형 그리�
 '''
 
 import cv2
-img = cv2.imread('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg')
+img = cv2.imread('/openCV/image_set/paper.jpg')
 cv2.rectangle(img, (50,100), (75,50), (255, 0, 0))        # 좌상 우하 좌표로 파란색 사각형 그리기
 cv2.rectangle(img, (300, 300), (100, 100), (0, 255, 0), 10)  # 우하 좌상 좌표로 초록색 사각형 그리기
 cv2.rectangle(img, (450, 200), (200, 450), (0, 0, 255), -1)  # 우상 좌하 좌표로 빨간색 사각형 채워 그리기
@@ -274,7 +274,7 @@ cv2.destroyAllWindows()
 
 
 import cv2
-img = cv2.imread('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg')
+img = cv2.imread('/openCV/image_set/paper.jpg')
 
 ## 원그리기
 # 원점 (150, 150),  반지름 100, 파란색
@@ -325,7 +325,7 @@ cv2.putText(img, text, point, fontFace, fontSize, color, [thickness, lineType])
 
 
 import cv2
-img = cv2.imread('C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/paper.jpg')
+img = cv2.imread('/openCV/image_set/paper.jpg')
 
 cv2.putText(img,"PLAIN", (50, 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
 cv2.putText(img,"SIMPLEX", (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0))
@@ -362,7 +362,7 @@ cv2.destroyAllWindows()
 
 
 import cv2
-file_path = 'C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/photo.jpg'
+file_path = '/openCV/image_set/photo.jpg'
 img = cv2.imread(file_path)                            # 이미지를 기본값으로 읽기
 img_gray = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) # 이미지를 그레이 스케일로 읽기
 cv2.namedWindow('origin', cv2.WINDOW_AUTOSIZE)         #origin 이라는 이름으로 창 생성
