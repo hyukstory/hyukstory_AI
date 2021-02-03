@@ -123,8 +123,8 @@ import numpy as np
 
 img_path = "C:/Users/hyukstory/Desktop/github/hyukstory_AI/openCV/image_set"
 # 입력이미지와 템플릿 이미지 읽기
-img = cv2.imread(img_path + '/JORDY_family.jpg')  # 기준 이미지 불러오기
-template = cv2.imread(img_path + '/JORDY.jpg')  # 비교할 이미지 불러오기
+img = cv2.imread(img_path + '/JORDY_family.jpg')  # 기준 이미지 불러오기 (입력 영상)
+template = cv2.imread(img_path + '/JORDY.jpg')  # 비교할 이미지 불러오기  (템플릿 이미지)
 th, tw = template.shape[:2]  # 비교할 이미지의 행 열 저장
 
 print(img.shape, template.shape)
